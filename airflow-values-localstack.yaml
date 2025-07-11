@@ -1,0 +1,49 @@
+images:
+  airflow:
+    repository: nickpeachey/airflow
+    tag: 3.0.1 # e.g., 2.7.2-python3.10-custom
+    pullPolicy: IfNotPresent
+
+executor: KubernetesExecutor
+
+dags:
+  gitSync:
+    enabled: true
+    repo: https://github.com/nickpeachey/airflow.git
+    branch: main
+    subPath: dags
+
+config:
+  core:
+    fernet_key: ""
+    load_examples: "false"
+    logging_level: "INFO"
+  kubernetes:
+    namespace: "airflow"
+  logging:
+    remote_logging: "true"
+    remote_log_conn_id: "minio_conn"
+    remote_base_log_folder: "s3://airflow-logs"
+
+connections:
+  - id: minio_conn
+    type: s3
+    extra: >-
+      {
+        "aws_access_key_id": "test",
+        "aws_secret_access_key": "test",
+        "endpoint_url": "http://localhost:4566",
+        "region_name": "us-east-1"
+      }
+  - id: kubernetes_default
+    type: kubernetes
+    extra: '{"in_cluster": true}'
+
+logs:
+  persistence:
+    enabled: false
+
+worker:
+  extraPipPackages:
+    - apache-airflow-providers-cncf-kubernetes>=6.0.0
+    - boto3

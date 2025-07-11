@@ -1,0 +1,29 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: spark-pod-manager
+  namespace: default # Define this role in the namespace where Spark pods will run or be managed
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods", "pods/log"] # Grant access to pods and their logs
+  verbs: ["get", "list", "watch", "create", "delete"] # Necessary verbs for Spark and log access
+- apiGroups: [""]
+  resources: ["configmaps"] # Spark might use configmaps for configuration
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["sparkoperator.k8s.io"]
+  resources: ["sparkapplications"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: airflow-spark-pod-manager-binding
+  namespace: default # This binding is for the 'default' namespace
+subjects:
+- kind: ServiceAccount
+  name: airflow-worker # The name of the service account
+  namespace: airflow # The namespace where the service account exists
+roleRef:
+  kind: Role
+  name: spark-pod-manager # The name of the Role defined above
+  apiGroup: rbac.authorization.k8s.io

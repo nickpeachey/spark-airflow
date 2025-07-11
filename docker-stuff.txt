@@ -1,0 +1,11 @@
+How to create Docker registry secret if private repo:
+kubectl create secret docker-registry regcred \
+  --docker-server=https://index.docker.io/v1/ \
+  --docker-username=YOUR_USERNAME \
+  --docker-password=YOUR_PASSWORD \
+  --docker-email=YOUR_EMAIL
+Then reference it in your SparkApplication or pod spec:
+
+spec:
+  imagePullSecrets:
+  - name: regcred
