@@ -16,4 +16,4 @@ with DAG(
         python_callable=lambda: print("Doing something..."),
     )
 
-do_something
+    do_something
