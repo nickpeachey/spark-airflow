@@ -9,6 +9,7 @@ def helloWorld():
 with DAG(dag_id="hello_world_dag",
          start_date=datetime(2021,1,1),
          schedule_interval='*/1 * * * *',
+         tags=["example", "nickpeachey", "willow_louise"],
          catchup=False) as dag:
     
     task1 = PythonOperator(

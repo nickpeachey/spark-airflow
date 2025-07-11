@@ -24,6 +24,8 @@ config:
     remote_logging: "true"
     remote_log_conn_id: "minio_conn"
     remote_base_log_folder: "s3://airflow-logs"
+  webserver:
+    instance_name: "Nicks Airflow"
 
 connections:
   - id: minio_conn
