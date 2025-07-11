@@ -1,23 +1,20 @@
 from airflow import DAG
-from airflow.utils.dates import days_ago
-from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import PythonOperator
+from datetime import datetime
+
+def helloWorld():
+    print("Hello, World!")
 
 # Define the DAG
-with DAG(
-    dag_id='my_first_dag',
-    schedule_interval='@daily',
-    start_date=days_ago(1),
-    catchup=False,
-) as dag:
+with DAG(dag_id="hello_world_dag",
+         start_date=datetime(2021,1,1),
+         schedule_interval="@hourly",
+         catchup=False) as dag:
+    
+    task1 = PythonOperator(
+        task_id="hello_world",
+        python_callable=helloWorld)
+    
 
-    # Define tasks
-    start_task = DummyOperator(
-        task_id='start_task'
-    )
-
-    end_task = DummyOperator(
-        task_id='end_task'
-    )
-
-    # Set task dependencies
-    start_task >> end_task
+task1
+    
