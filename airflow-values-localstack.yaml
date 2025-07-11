@@ -9,7 +9,7 @@ executor: KubernetesExecutor
 dags:
   gitSync:
     enabled: true
-    repo: https://github.com/nickpeachey/airflow.git
+    repo: https://github.com/nickpeachey/spark-airflow.git
     branch: main
     subPath: dags
 
